@@ -96,11 +96,11 @@ def login_submit():
         username = request.form['username']
         password = request.form['password']
         all_post = Post.query.filter(Post.username == username).all()
-        if(db.session.query(Blog).filter(Blog.username == username and Blog.password == password).count() == 1):
+        if(db.session.query(Blog).filter(Blog.username == username,Blog.password == password).count() == 1):
             username_post.insert(0,username)
             return render_template('user_page.html', username = username, text= 'user page', all_post = all_post)
         else:
-            return render_template('login.html')
+            return render_template('login.html',msg='Please login with correct credentials')
 
 @app.route('/user_page/<username>',methods=['POST'])
 def user_page(username):
