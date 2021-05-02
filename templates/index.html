@@ -1,4 +1,20 @@
 {% extends 'layout.html' %}
 {% block content %}
-    <h1>Welcome to home page</h1>
+    <h1>Welcome to Blog post</h1>
+    <br/>
+    {% if msg %}
+        <h4>{{msg}}</h4>
+    {% endif %}
+    <br/>
+    {% if post_index %}
+    {% for index in post_index %}
+    <div class="card" style="width: 18rem;margin-top: 20px;float: left;padding: 15px;margin-right:10px;">
+        <div class="card-body">
+            <h3 class="card-title">User: {{index.username}}</h3>
+            <h5 class="card-title">Title: {{index.title}}</h5>
+            <p class="card-text">{{index.content}}</p>
+        </div>
+    </div>
+    {% endfor %}
+{% endif %}
 {% endblock %}
