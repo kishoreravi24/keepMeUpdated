@@ -1,4 +1,10 @@
 # keepMeUpdated
- blog applicaton
+blog applicaton
 
-https://user-images.githubusercontent.com/36214175/116958607-d4dac880-acb8-11eb-8fcc-8840fae3fc03.mov
+# simple blog application:
+  * Register
+  * login
+  * create blog with title (10 char) and content
+  * edit blog 
+  * delete blog
+  * view all user blog in home page
