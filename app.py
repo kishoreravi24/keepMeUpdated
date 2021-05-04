@@ -1,6 +1,7 @@
 from flask import Flask,render_template,request
 from flask_sqlalchemy import SQLAlchemy
-
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
 
 app = Flask(__name__)
 
@@ -17,6 +18,11 @@ else:
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+session = sessionmaker()
+engine = create_engine('postgresql://postgres:P@ssword1@localhost/blog')
+session.configure(bind=engine)
+session = session()
 
 #create model
 class Blog(db.Model):
@@ -48,10 +54,6 @@ class Post(db.Model):
 def index():
     post_index = Post.query.all()
     return render_template('index.html', post_index = post_index)
-
-@app.route('/about')
-def about():
-    return render_template('about.html')
 
 @app.route('/login')
 def login():
@@ -113,6 +115,54 @@ def user_page(username):
         all_post = Post.query.filter(Post.username == username).all()
         return render_template('user_page.html', all_post = all_post)
 
+
+@app.route('/edit_page/<id>', methods=['GET'])
+def edit_page(id):
+    try:
+        if len(username_post[0]) >= 1:
+            page = Post.query.get(id)
+            return render_template('edit_page.html',id = page.id, username = page.username, title = page.title, content = page.content)
+    except IndexError:
+        post_index = Post.query.all()
+        return render_template('index.html',msg='Please login', post_index = post_index)
+    
+
+@app.route('/edit_page_commit/<id>', methods=['POST'])
+def edit_page_commit(id):
+    try:
+        if len(username_post[0]) >= 1:
+                edit_title = request.form['edit_post_title']
+                edit_content = request.form['edit_post_content']
+                edit = Post.query.get(id)
+                edit.title = edit_title
+                edit.content = edit_content
+                db.session.commit()
+                return user()
+    except IndexError:
+        post_index = Post.query.all()
+        return render_template('index.html',msg='Please login', post_index = post_index)
+
+
+@app.route('/delete_page/<id>', methods=['GET'])
+def delete_page(id):
+    try:
+        if len(username_post[0]) >= 1:
+                Post.query.filter(Post.id == id).delete()
+                db.session.commit()
+                return user()
+    except IndexError:
+        post_index = Post.query.all()
+        return render_template('index.html',msg='Please login', post_index = post_index)
+
+@app.route('/user_logout')
+def user_logout():
+    try:
+        if len(username_post[0]) >= 1:
+            session.close()
+            username_post.pop()
+            return index()
+    except:
+        return index()
 
 if __name__ == '__main__':
     app.run()

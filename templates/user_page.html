@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="container-fluid">
-    <h3>Welcome {{username}}</h3>
+    <span><h3 style="margin-top: 30px;">Welcome {{username}} &nbsp; <a href="{{url_for('user_logout')}}" class="btn btn-primary">Logout</a></h3></span>
     <form style="margin-top: 20px;" action="{{url_for('user_page',username=username)}}" method="POST">
         <div class="mb-3">
             <label for="postTitle" class="form-label">Post Title</label>
@@ -19,6 +19,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{index.title}}</h5>
                     <p class="card-text">{{index.content}}</p>
+                    <a href="{{url_for('edit_page',id=index.id)}}" class="btn btn-primary">Edit</a> &nbsp; <a href="{{url_for('delete_page',id=index.id)}}" class="btn btn-primary">Delete</a>
                 </div>
             </div>
             {% endfor %}
